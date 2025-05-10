@@ -46,12 +46,6 @@ bool array_equal(
     T const & array_a,
     T const & array_b
 ) {
-    static_assert(
-        std::is_array<T>::value
-            && std::is_convertible<T, std::uint8_t *>::value
-            && sizeof(T) > 0,
-        "Arguments to array_equal must be std::uint8_t arrays[]."
-    );
     return is_equal(array_a, array_b, sizeof(T));
 }
 
@@ -61,12 +55,6 @@ std::uint8_t const * load_array(
     T & destination,
     std::uint8_t const * source
 ) {
-    static_assert(
-        std::is_array<T>::value
-            && std::is_convertible<T, std::uint8_t *>::value
-            && sizeof(T) > 0,
-        "The first argument to load_array must be a std::uint8_t array[]."
-    );
     std::memcpy(destination, source, sizeof(T));
     return source + sizeof(T);
 }
@@ -77,12 +65,6 @@ std::uint8_t * store_array(
     std::uint8_t * destination,
     T const & source
 ) {
-    static_assert(
-        std::is_array<T>::value
-            && std::is_convertible<T, std::uint8_t *>::value
-            && sizeof(T) > 0,
-        "The second argument to store_array must be a std::uint8_t array[]."
-    );
     std::memcpy(destination, source, sizeof(T));
     return destination + sizeof(T);
 }
