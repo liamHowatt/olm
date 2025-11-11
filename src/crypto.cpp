@@ -182,7 +182,7 @@ void _olm_crypto_aes_encrypt_cbc(
     std::memcpy(input_block, iv->iv, AES_BLOCK_LENGTH);
     while (input_length >= AES_BLOCK_LENGTH) {
         xor_block<AES_BLOCK_LENGTH>(input_block, input);
-        ::aes_encrypt(input_block, output, key_schedule, AES_KEY_BITS);
+        ::olm_aes_encrypt(input_block, output, key_schedule, AES_KEY_BITS);
         std::memcpy(input_block, output, AES_BLOCK_LENGTH);
         input += AES_BLOCK_LENGTH;
         output += AES_BLOCK_LENGTH;
@@ -195,7 +195,7 @@ void _olm_crypto_aes_encrypt_cbc(
     for (; i < AES_BLOCK_LENGTH; ++i) {
         input_block[i] ^= AES_BLOCK_LENGTH - input_length;
     }
-    ::aes_encrypt(input_block, output, key_schedule, AES_KEY_BITS);
+    ::olm_aes_encrypt(input_block, output, key_schedule, AES_KEY_BITS);
     olm::unset(key_schedule);
     olm::unset(input_block);
 }
@@ -214,7 +214,7 @@ std::size_t _olm_crypto_aes_decrypt_cbc(
     std::memcpy(block1, iv->iv, AES_BLOCK_LENGTH);
     for (std::size_t i = 0; i < input_length; i += AES_BLOCK_LENGTH) {
         std::memcpy(block2, &input[i], AES_BLOCK_LENGTH);
-        ::aes_decrypt(&input[i], &output[i], key_schedule, AES_KEY_BITS);
+        ::olm_aes_decrypt(&input[i], &output[i], key_schedule, AES_KEY_BITS);
         xor_block<AES_BLOCK_LENGTH>(&output[i], block1);
         std::memcpy(block1, block2, AES_BLOCK_LENGTH);
     }

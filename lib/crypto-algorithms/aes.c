@@ -247,7 +247,7 @@ int aes_encrypt_cbc(const BYTE in[], size_t in_len, BYTE out[], const WORD key[]
 	for (idx = 0; idx < blocks; idx++) {
 		memcpy(buf_in, &in[idx * AES_BLOCK_SIZE], AES_BLOCK_SIZE);
 		xor_buf(buf_out, buf_in, AES_BLOCK_SIZE);
-		aes_encrypt(buf_in, buf_out, key, keysize);
+		olm_aes_encrypt(buf_in, buf_out, key, keysize);
 		memcpy(&out[idx * AES_BLOCK_SIZE], buf_out, AES_BLOCK_SIZE);
 	}
 
@@ -269,7 +269,7 @@ int aes_encrypt_cbc_mac(const BYTE in[], size_t in_len, BYTE out[], const WORD k
 	for (idx = 0; idx < blocks; idx++) {
 		memcpy(buf_in, &in[idx * AES_BLOCK_SIZE], AES_BLOCK_SIZE);
 		xor_buf(buf_out, buf_in, AES_BLOCK_SIZE);
-		aes_encrypt(buf_in, buf_out, key, keysize);
+		olm_aes_encrypt(buf_in, buf_out, key, keysize);
 		// Do not output all encrypted blocks.
 	}
 
@@ -310,13 +310,13 @@ void aes_encrypt_ctr(const BYTE in[], size_t in_len, BYTE out[], const WORD key[
 
 	if (in_len > AES_BLOCK_SIZE) {
 		for (idx = 0; idx < last_block_length; idx += AES_BLOCK_SIZE) {
-			aes_encrypt(iv_buf, out_buf, key, keysize);
+			olm_aes_encrypt(iv_buf, out_buf, key, keysize);
 			xor_buf(out_buf, &out[idx], AES_BLOCK_SIZE);
 			increment_iv(iv_buf, AES_BLOCK_SIZE);
 		}
 	}
 
-	aes_encrypt(iv_buf, out_buf, key, keysize);
+	olm_aes_encrypt(iv_buf, out_buf, key, keysize);
 	xor_buf(out_buf, &out[idx], in_len - idx);   // Use the Most Significant bytes.
 }
 
@@ -904,7 +904,7 @@ void InvMixColumns(BYTE state[][4])
 // (En/De)Crypt
 /////////////////
 
-void aes_encrypt(const BYTE in[], BYTE out[], const WORD key[], int keysize)
+void olm_aes_encrypt(const BYTE in[], BYTE out[], const WORD key[], int keysize)
 {
 	BYTE state[4][4];
 
@@ -977,7 +977,7 @@ void aes_encrypt(const BYTE in[], BYTE out[], const WORD key[], int keysize)
 	out[15] = state[3][3];
 }
 
-void aes_decrypt(const BYTE in[], BYTE out[], const WORD key[], int keysize)
+void olm_aes_decrypt(const BYTE in[], BYTE out[], const WORD key[], int keysize)
 {
 	BYTE state[4][4];
 

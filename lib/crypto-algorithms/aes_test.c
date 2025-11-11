@@ -50,14 +50,14 @@ int aes_ecb_test()
 	//print_hex(key[0], 32);
 
 	for(idx = 0; idx < 2; idx++) {
-		aes_encrypt(plaintext[idx], enc_buf, key_schedule, 256);
+		olm_aes_encrypt(plaintext[idx], enc_buf, key_schedule, 256);
 		//printf("\nPlaintext    : ");
 		//print_hex(plaintext[idx], 16);
 		//printf("\n-encrypted to: ");
 		//print_hex(enc_buf, 16);
 		pass = pass && !memcmp(enc_buf, ciphertext[idx], 16);
 
-		aes_decrypt(ciphertext[idx], enc_buf, key_schedule, 256);
+		olm_aes_decrypt(ciphertext[idx], enc_buf, key_schedule, 256);
 		//printf("\nCiphertext   : ");
 		//print_hex(ciphertext[idx], 16);
 		//printf("\n-decrypted to: ");
